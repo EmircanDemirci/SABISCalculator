@@ -26,9 +26,9 @@
 
 ## 🚀 Proje Hakkında
 
-**SABISCalculator**, Sakarya Üniversitesi (SAÜ) öğrencilerinin kullandığı SABİS (OBS) sistemi üzerinde çalışan, açık kaynaklı bir Chrome eklentisidir.
+**SABISCalculator**, Sakarya Üniversitesi (SAÜ) öğrencilerinin kullandığı SABİS (OBS) sistemi üzerinde çalışan, açık kaynaklı bir Chrome eklentisidir. Hesaplamalar tahminidir, resmi sonuç yerine geçmez.
 
-Bu eklenti tamamen **istemci taraflı (client-side)** çalışır ve verilerinizi hiçbir sunucuya göndermez. Kısacası; sadece sizin tarayıcınızda çalışır, dışarıya bilgi sızdırmaz.
+Bu eklenti tamamen **istemci taraflı (client-side)** çalışır ve verilerinizi hiçbir sunucuya göndermez. Kısacası; sadece sizin tarayıcınızda çalışır, dışarıya bilgi sızdırmaz. 
 
 ---
 
