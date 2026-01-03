@@ -1,7 +1,7 @@
 # 🎓 SABISCalculator
 
 <div align="center">
-  <img width="600" height="600" alt="icon" src="https://github.com/user-attachments/assets/dca2e3d6-550f-4430-8139-dd4d25d28858" />
+  <img width="200" height="200" alt="icon" src="https://github.com/user-attachments/assets/dca2e3d6-550f-4430-8139-dd4d25d28858" />
   <br>
   <h3>Sakarya Üniversitesi & SUBÜ Öğrencileri İçin Gelişmiş Not Hesaplayıcı</h3>
   <p>
@@ -15,7 +15,7 @@
 
 1. [Proje Hakkında](#-proje-hakkında)
 2. [Özellikler](#-özellikler)
-3. [Kurulum](#-kurulum)
+3. [Kurulum (Resimli Anlatım)](#-kurulum) 👈 *(Tıkla ve Git)*
 4. [Nasıl Kullanılır?](#-nasıl-kullanılır) 
 5. [Gizlilik Politikası](#-gizlilik-politikası) 
 6. [İletişim](#-iletişim)
@@ -25,7 +25,8 @@
 ## 🚀 Proje Hakkında
 
 **SABISCalculator**, Sakarya Üniversitesi (SAÜ) ve Sakarya Uygulamalı Bilimler Üniversitesi (SUBÜ) öğrencilerinin kullandığı SABİS (OBS) sistemi üzerinde çalışan, açık kaynaklı bir Chrome eklentisidir.
-Eklenti tamamen **istemci taraflı (client-side)** çalışır ve verilerinizi hiçbir sunucuya göndermez.
+
+Bu eklenti tamamen **istemci taraflı (client-side)** çalışır ve verilerinizi hiçbir sunucuya göndermez. Kısacası; sadece sizin tarayıcınızda çalışır, dışarıya bilgi sızdırmaz.
 
 ---
 
@@ -42,14 +43,34 @@ Eklenti tamamen **istemci taraflı (client-side)** çalışır ve verilerinizi h
 
 ## 🛠 Kurulum
 
-Bu eklenti şu an geliştirici modunda kurulabilir:
+Bu eklenti şu an Chrome Mağazası'nda olmadığı için **manuel** kurmanız gerekiyor. Çok basit, aşağıdaki adımları sırasıyla yapmanız yeterli:
 
-1.  Bu projeyi **ZIP** olarak indirin veya `git clone` ile çekin.
-2.  Google Chrome'da adres çubuğuna `chrome://extensions/` yazın.
-3.  Sağ üstteki **"Geliştirici Modu"**nu açın.
-4.  **"Paketlenmemiş öğe yükle"** butonuna tıklayın.
-5.  İndirdiğiniz proje klasörünü seçin.
-6.  Tebrikler! Eklenti kuruldu. SABİS'e giriş yapabilirsiniz.
+### Adım 1: Dosyayı İndirin
+1.  Bu sayfanın sağ üst köşesindeki yeşil renkli **"<> Code"** butonuna tıklayın.
+2.  Açılan menüden **"Download ZIP"** seçeneğine tıklayın.
+3.  Bilgisayarınıza bir dosya inecek.
+
+### Adım 2: Klasöre Çıkartın (⚠️ EN ÖNEMLİ ADIM)
+1.  İndirdiğiniz o ZIP dosyasına **sağ tıklayın**.
+2.  **"Klasöre Ayıkla"** veya **"Tümünü Ayıkla"** diyerek dosyaları dışarı çıkarın.
+3.  Elinizde artık fermuarlı (zipli) olmayan, normal sarı bir klasör olmalı.
+    * *Dikkat: ZIP dosyasını direkt seçerseniz çalışmaz! Klasöre çıkarmalısınız.*
+
+### Adım 3: Chrome Uzantılar Sayfasını Açın
+1.  Google Chrome tarayıcınızı açın.
+2.  Adres çubuğuna şunu yazın ve Enter'a basın:
+    `chrome://extensions/`
+3.  (Veya sağ üstteki yapboz parçasına tıklayıp "Uzantıları Yönet" diyebilirsiniz.)
+
+### Adım 4: Geliştirici Modunu Açın
+1.  Açılan sayfanın **sağ üst köşesinde** bulunan **"Geliştirici Modu"** (Developer Mode) anahtarını açık konuma getirin (Mavi olsun).
+
+### Adım 5: Eklentiyi Yükleyin
+1.  Sol üstte yeni beliren butonlardan **"Paketlenmemiş öğe yükle"** (Load Unpacked) butonuna tıklayın.
+2.  Açılan pencereden, **Adım 2'de klasöre çıkardığınız** o sarı klasörü bulun ve seçin.
+3.  **"Klasörü Seç"** butonuna basın.
+
+🎉 **Tebrikler!** Eklenti tarayıcınıza kuruldu. Artık SABİS'e girip kullanmaya başlayabilirsiniz.
 
 ---
 
