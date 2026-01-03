@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SABISCalculator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* CSS kodların aynen kalıyor, dokunmana gerek yok */
+    :root {
+      --primary-blue: #0984e3; --dark-blue: #2c3e50; --accent-orange: #ff7675; --vibrant-orange: #e17055;
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --glass-bg: rgba(255, 255, 255, 0.95); --text-main: #2c3e50; --text-sub: #636e72;
+    }
+    body.dark-theme {
+      --primary-blue: #74b9ff; --dark-blue: #dfe6e9;
+      --bg-gradient: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+      --glass-bg: rgba(30, 30, 30, 0.95); --text-main: #dfe6e9; --text-sub: #b2bec3;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 360px; height: auto; background: var(--bg-gradient); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; padding: 15px; transition: background 0.3s ease; }
+    
+    .card { width: 100%; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+    /* Navigasyon (Sekmeler) */
+    .nav-tabs { display: flex; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
+    .nav-item { flex: 1; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; color: var(--text-sub); cursor: pointer; border-radius: 10px; transition: all 0.3s ease; }
+    .nav-item.active { background: white; color: var(--primary-blue); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    body.dark-theme .nav-item.active { background: #444; color: #fff; }
+
+    /* Header */
+    .header { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand i { font-size: 20px; color: var(--vibrant-orange); background: rgba(225, 112, 85, 0.1); padding: 8px; border-radius: 10px; }
+    .brand-text { font-size: 18px; font-weight: 800; color: var(--dark-blue); }
+    .brand-text span { color: var(--primary-blue); }
+
+    /* Content Sections */
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Settings Styles */
+    .control-panel { background: rgba(0,0,0,0.03); border-radius: 15px; padding: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 10px; }
+    .status-label { font-size: 11px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; display: block; }
+    .status-value { font-size: 14px; font-weight: 700; color: var(--text-main); }
+    .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #b2bec3; transition: .4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background: linear-gradient(90deg, var(--vibrant-orange), var(--accent-orange)); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Notifications List Styles */
+    .notification-list { max-height: 250px; overflow-y: auto; }
+    .empty-state { text-align: center; color: var(--text-sub); font-size: 13px; padding: 20px; opacity: 0.7; }
+    .notif-item { background: rgba(255,255,255,0.6); padding: 12px; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid var(--vibrant-orange); display: flex; flex-direction: column; gap: 4px; }
+    body.dark-theme .notif-item { background: rgba(255,255,255,0.05); }
+    .notif-title { font-weight: 700; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; }
+    .notif-time { font-size: 10px; color: var(--text-sub); font-weight: normal; }
+    .notif-msg { font-size: 12px; color: var(--text-sub); line-height: 1.3; }
+    
+    .clear-btn { width: 100%; padding: 8px; border: none; background: transparent; color: var(--text-sub); font-size: 11px; cursor: pointer; text-decoration: underline; margin-top: 5px; }
+
+    /* Footer */
+    .footer { text-align: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px; margin-top: 15px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    .main-dev-link { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: white; font-size: 12px; font-weight: 600; background: #2c3e50; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    body.dark-theme .main-dev-link { background: #0984e3; }
+    .sub-credit { font-size: 10px; color: var(--text-sub); }
+    .sub-credit a { color: var(--text-sub); text-decoration: none; font-weight: 600; border-bottom: 1px dotted; }
+
+    /* YENİ: Privacy Button Style */
+    .privacy-link {
+        font-size: 11px;
+        color: var(--text-sub);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
+        transition: color 0.3s;
+    }
+    .privacy-link:hover {
+        color: var(--primary-blue);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    
+    <div class="header">
+      <div class="brand">
+        <i class="fas fa-calculator"></i>
+        <div class="brand-text">SABIS<span>Calculator</span></div>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+        <div class="nav-item active" data-tab="settings">Ayarlar</div>
+        <div class="nav-item" data-tab="notifications">Bildirimler <span id="badge" style="display:none; color: red;">●</span></div>
+    </div>
+
+    <div id="settings" class="tab-content active">
+        <div class="control-panel">
+          <div><span class="status-label"><i class="fas fa-power-off"></i> Hesaplayıcı</span><span id="extensionStatus" class="status-value">Devre Dışı</span></div>
+          <label class="toggle-switch"><input type="checkbox" id="extensionToggle" /><span class="slider"></span></label>
+        </div>
+
+        <div class="control-panel">
+          <div><span class="status-label"><i class="fas fa-moon"></i> Karanlık Mod</span><span id="darkModeStatus" class="status-value">Kapalı</span></div>
+          <label class="toggle-switch"><input type="checkbox" id="darkModeToggle" /><span class="slider"></span></label>
+        </div>
+
+        <div class="control-panel">
+            <div>
+                <span class="status-label"><i class="fas fa-bell"></i> Otomatik Kontrol</span>
+                <span id="notificationStatus" class="status-value">Kapalı</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="notificationToggle" />
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="footer">
+          <a href="https://github.com/EmircanDemirci" target="_blank" class="main-dev-link"><i class="fab fa-github"></i><span>Geliştirici: Venoox</span></a>
+          
+          <a href="privacy.html" target="_blank" class="privacy-link">
+              <i class="fas fa-shield-alt"></i> Gizlilik ve Kullanım Rehberi
+          </a>
+
+          <div class="sub-credit">İlk versiyon: <a href="https://github.com/osmntahir/SabisAverageCalculator" target="_blank">osmntahir</a></div>
+        </div>
+    </div>
+
+    <div id="notifications" class="tab-content">
+        <div class="notification-list" id="notifList">
+            <div class="empty-state">
+                <i class="fas fa-bell-slash" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                Henüz yeni bir not bildirimi yok.
+            </div>
+        </div>
+        <button class="clear-btn" id="clearNotifs">Bildirimleri Temizle</button>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

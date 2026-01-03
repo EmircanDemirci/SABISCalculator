@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "SABISCalculator",
+  "version": "1.0",
+  "description": "SABİS için geliştirilmiş; ders ve transkript (GNO) ortalaması hesaplama, çan eğrisi simülasyonu ve yeni not açıklandığında anlık bildirim alma eklentisi.",
+  "permissions": ["storage", "alarms", "notifications"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SABISCalculator",
+    "default_icon": {
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://obs.sabis.sakarya.edu.tr/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}

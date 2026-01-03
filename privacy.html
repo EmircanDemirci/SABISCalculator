@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABISCalculator - Gizlilik ve Rehber</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0984e3;
+            --dark-blue: #2c3e50;
+            --vibrant-orange: #e17055;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --text-muted: #636e72;
+            --border-color: rgba(0,0,0,0.08);
+        }
+
+        /* KARANLIK MOD RENKLERİ */
+        body.dark-theme {
+            --primary-blue: #74b9ff;
+            --dark-blue: #dfe6e9;
+            --vibrant-orange: #ff7675;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #dfe6e9;
+            --text-muted: #b2bec3;
+            --border-color: rgba(255,255,255,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        .nav-wrapper { display: flex; justify-content: space-between; align-items: center; }
+
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 800; color: var(--dark-blue); letter-spacing: -0.5px; }
+        .brand i { color: var(--vibrant-orange); font-size: 26px; }
+        .brand span { color: var(--primary-blue); }
+
+        nav { display: flex; align-items: center; gap: 15px; }
+
+        nav button.tab-btn {
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        nav button.tab-btn.active, nav button.tab-btn:hover {
+            background-color: rgba(9, 132, 227, 0.1);
+            color: var(--primary-blue);
+        }
+        
+        /* Dark Mode Toggle */
+        #theme-toggle {
+            background: none;
+            border: 2px solid var(--text-muted);
+            color: var(--text-muted);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            margin-left: 10px; transition: all 0.3s;
+        }
+        #theme-toggle:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+
+        /* Main Content */
+        main { padding: 50px 0; min-height: 80vh; }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        h1 { font-size: 36px; color: var(--dark-blue); margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; letter-spacing: -1px; }
+        h2 { font-size: 24px; color: var(--primary-blue); margin-top: 40px; margin-bottom: 20px; font-weight: 700; }
+        h3 { font-size: 18px; color: var(--text-color); margin-bottom: 10px; font-weight: 700; }
+        
+        p { margin-bottom: 18px; color: var(--text-muted); font-size: 16px; }
+        strong { color: var(--text-color); }
+
+        ul { margin-left: 20px; margin-bottom: 25px; list-style-type: none; }
+        li { margin-bottom: 12px; position: relative; padding-left: 25px; color: var(--text-muted); }
+        li::before {
+            content: "\f00c"; /* FontAwesome Check Icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute; left: 0; top: 2px;
+            color: var(--vibrant-orange);
+            font-size: 14px;
+        }
+
+        /* Alert Boxes */
+        .info-box {
+            background: rgba(9, 132, 227, 0.05);
+            border-left: 4px solid var(--primary-blue);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info-box.warning {
+            background: rgba(225, 112, 85, 0.05);
+            border-left-color: var(--vibrant-orange);
+        }
+
+        .contact-box {
+            background: var(--bg-color);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px dashed var(--text-muted);
+            text-align: center;
+        }
+        .contact-box a { color: var(--primary-blue); font-weight: 700; text-decoration: none; font-size: 18px; }
+        .contact-box a:hover { text-decoration: underline; }
+
+        /* GitHub Box Specific */
+        .github-box {
+            background: #24292e; /* GitHub Black */
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            text-align: center;
+            color: #fff;
+            transition: transform 0.2s;
+        }
+        .github-box:hover { transform: translateY(-3px); }
+        .github-box p { color: #ccc; margin-bottom: 10px; font-size: 14px; }
+        .github-box a { 
+            color: #fff; 
+            font-weight: 700; 
+            text-decoration: none; 
+            font-size: 16px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            border: 1px solid #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .github-box a:hover { background: #fff; color: #24292e; }
+
+        /* Guide Steps */
+        .step { display: flex; gap: 25px; margin-bottom: 30px; align-items: flex-start; }
+        .step-number {
+            background: linear-gradient(135deg, var(--vibrant-orange), var(--primary-blue));
+            color: white;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(225, 112, 85, 0.3);
+            font-size: 18px;
+        }
+
+        footer {
+            background: var(--card-bg);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+        footer a { color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="brand">
+                    <i class="fas fa-calculator"></i>
+                    <div>SABIS<span>Calculator</span></div>
+                </div>
+                <nav>
+                    <button id="btn-privacy" class="tab-btn active" data-target="privacy">Gizlilik Politikası</button>
+                    <button id="btn-guide" class="tab-btn" data-target="guide">Nasıl Kullanılır?</button>
+                    <button id="theme-toggle" title="Temayı Değiştir"><i class="fas fa-moon"></i></button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section id="privacy" class="content-section active">
+            <div class="card">
+                <h1>Gizlilik Politikası ve Veri Güvenliği</h1>
+                
+                <div class="info-box">
+                    <p style="margin: 0; font-weight: 600; color: var(--primary-blue);">
+                        <i class="fas fa-shield-alt"></i> Özetle: Verileriniz size aittir. Bu eklenti hiçbir kişisel verinizi toplamaz, saklamaz veya paylaşmaz.
+                    </p>
+                </div>
+
+                <p>SABISCalculator, Sakarya Üniversitesi öğrencilerinin akademik hesaplamalarını kolaylaştırmak amacıyla geliştirilmiş, <strong>açık kaynaklı</strong> ve <strong>tamamen güvenli</strong> bir tarayıcı eklentisidir. Aşağıda, verilerinizin nasıl işlendiğine dair detaylı açıklamaları bulabilirsiniz.</p>
+
+                <h2>1. Sıfır Veri Toplama Politikası</h2>
+                <p>Açıkça belirtmek isteriz ki; SABISCalculator herhangi bir sunucuya bağlı değildir. Eklentiyi kullandığınızda:</p>
+                <ul>
+                    <li><strong>Öğrenci Bilgileri:</strong> Öğrenci numaranız, isminiz, TC kimlik numaranız veya SABİS şifreniz asla okunmaz ve kaydedilmez.</li>
+                    <li><strong>Not Bilgileri:</strong> Girdiğiniz vize/final notları veya transkript verileriniz <u>asla</u> geliştiriciye veya üçüncü taraflara gönderilmez.</li>
+                    <li><strong>Analitik ve Takip:</strong> Eklenti içerisinde kullanım alışkanlıklarınızı takip eden (Google Analytics vb.) hiçbir izleyici kod bulunmamaktadır.</li>
+                </ul>
+
+                <h2>2. Veriler Nerede İşleniyor?</h2>
+                <p>Eklentinin tüm fonksiyonları <strong>"Client-Side" (İstemci Taraflı)</strong> olarak çalışır. Bunun anlamı şudur:</p>
+                <ul>
+                    <li>Hesaplamalar (ortalama, GNO vb.) tamamen sizin bilgisayarınızın işlemcisi (CPU) ve belleği (RAM) kullanılarak yapılır.</li>
+                    <li>Veriler internet üzerinden bir yere gitmez; tarayıcınızın o an açık olan sekmesi içinde yaşar ve sekme kapandığında silinir.</li>
+                    <li>Sadece "Ayarlar" (Karanlık mod tercihi, eklenti açık/kapalı durumu) tarayıcınızın yerel hafızasında (Chrome Storage) saklanır ki bir sonraki girişinizde tercihleriniz hatırlansın.</li>
+                </ul>
+
+                <h2>3. İzinler ve Kullanım Amaçları</h2>
+                <p>Google Chrome Mağazası politikaları gereği, eklentinin çalışabilmesi için bazı izinler talep edilir. Bu izinlerin ne amaçla kullanıldığı aşağıdadır:</p>
+                
+                <div class="info-box warning">
+                    <p><strong><i class="fas fa-key"></i> "obs.sabis.sakarya.edu.tr sitesindeki verilerinizi okuma ve değiştirme" izni:</strong></p>
+                    <p style="font-size: 14px; margin-top: 5px;">Bu ifade korkutucu görünebilir ancak teknik bir zorunluluktur. Eklentinin not tablolarının yanına "Hesaplama Kutucuğu" ekleyebilmesi için sayfayı "değiştirme" (yeni HTML kodu ekleme) yetkisine sahip olması gerekir. Bu yetki sadece not tablolarına kutucuk eklemek ve renkleri düzenlemek için kullanılır.</p>
+                </div>
+
+                <ul>
+                    <li><strong>storage:</strong> Karanlık mod ve eklenti aktiflik durumunu tarayıcınızda hatırlamak için.</li>
+                    <li><strong>alarms / notifications:</strong> Yeni bir not girildiğinde size tarayıcı üzerinden bildirim gönderebilmek için.</li>
+                </ul>
+
+                <h2>4. Yasal Uyarı</h2>
+                <p>SABISCalculator, öğrencilere yardımcı olmak amacıyla geliştirilmiş bir araçtır. Hesaplanan ortalamalar ve harf notları "tahmini" değerlerdir. Resmi transkriptiniz ve SABİS üzerindeki nihai sonuçlar her zaman esastır. Yazılımın hesaplama hatalarından doğabilecek durumlardan geliştirici sorumlu tutulamaz.</p>
+
+                <h2>5. Açık Kaynak ve Şeffaflık (Open Source)</h2>
+                <p>Güven, şeffaflıktan gelir. SABISCalculator projesinin kaynak kodları tamamen halka açıktır. Bu, yazdığımız her satır kodun herkes tarafından görülebilir ve denetlenebilir olduğu anlamına gelir. Bu sayede:</p>
+                <ul>
+                    <li>Eklentinin arka planda ne yaptığını (veya yapmadığını) inceleyebilirsiniz.</li>
+                    <li>Kötü amaçlı bir yazılım, veri hırsızlığı veya gizli bir arka kapı (Backdoor) olmadığını teknik olarak teyit edebilirsiniz.</li>
+                </ul>
+
+                <div class="github-box">
+                    <p>Kaynak kodlarını incelemek ve güvenliğinizden emin olmak için:</p>
+                    <a href="https://github.com/EmircanDemirci" target="_blank">
+                        <i class="fab fa-github"></i> GitHub Profilim ve Projeler
+                    </a>
+                </div>
+
+                <h2>6. İletişim ve Güvenlik Bildirimi</h2>
+                <p>Güvenlik, gizlilik veya işleyiş hakkında aklınıza takılan en ufak bir soruda lütfen geliştirici ile iletişime geçin.</p>
+                
+                <div class="contact-box">
+                    <p style="margin-bottom: 5px;">Geliştirici İletişim:</p>
+                    <a href="mailto:emircandemirci12@gmail.com"><i class="fas fa-envelope"></i> emircandemirci12@gmail.com</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="guide" class="content-section">
+            <div class="card">
+                <h1>Kullanım Kılavuzu</h1>
+                <p>SABISCalculator ile akademik hesaplamalarınızı saniyeler içinde yapabilirsiniz. İşte adım adım kullanım rehberi:</p>
+                
+                <h2>Temel Özellikler</h2>
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Eklentiyi Aktifleştirme</h3>
+                        <p>Eklentiyi kurduktan sonra tarayıcınızın sağ üst köşesindeki SABISCalculator simgesine tıklayın. Açılan pencerede <strong>"Hesaplayıcı"</strong> anahtarının açık olduğundan emin olun. Ayrıca göz sağlığınız için <strong>"Karanlık Mod"</strong>u buradan açabilirsiniz.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Ders İçi Ortalama & Harf Notu</h3>
+                        <p>SABİS'te "Not Listesi" veya "Sınav Sonuçları" ekranına girdiğinizde, her dersin not tablosuna yeni kutucuklar eklendiğini göreceksiniz.</p>
+                        <ul>
+                            <li><strong>Not Girişi:</strong> Boş olan vize/final/bütünleme kutucuklarının yanındaki gri alana tahmini notunuzu yazın.</li>
+                            <li><strong>Anlık Hesaplama:</strong> Siz yazdıkça ortalamanız anlık olarak güncellenir.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Çan Eğrisi (Bağıl Değerlendirme) Simülasyonu</h3>
+                        <p>Sistem varsayılan olarak 50 ortalamayı DD (Geçme) notu olarak kabul eder. Ancak hocanız çan eğrisini değiştirebilir.</p>
+                        <ul>
+                            <li>Tablonun solundaki <strong>"Çan (DD Sınırı)"</strong> kutusuna hocanın belirleyebileceği baraj notunu yazın (Örn: 35, 40).</li>
+                            <li>Eklenti, girdiğiniz bu sınıra göre tüm harf notlarını (AA, BA, BB...) yeniden hesaplar ve size hangi harfi alacağınızı renkli bir şekilde gösterir.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Transkript GNO Hesaplama</h3>
+                        <p>"Transkript" sayfasına girdiğinizde eklenti otomatik olarak devreye girer.</p>
+                        <ul>
+                            <li>Her dersin kredisini ve harf notunu değiştirebileceğiniz açılır menüler (dropdown) oluşur.</li>
+                            <li>Buradan "Bu dersten AA alırsam ortalamam kaç olur?" senaryolarını deneyebilirsiniz.</li>
+                            <li>Genel Not Ortalamanız (GNO), sayfanın sağ alt köşesindeki sabit kutucukta anlık olarak gösterilir.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>İpucu:</strong> Eğer not girişi yaptığınızda sayfa yenileniyorsa veya hesaplama yapmıyorsa, sayfayı bir kez yenilemeniz (F5) yeterlidir.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SABISCalculator. Tüm hakları saklıdır. | Geliştirici: <a href="https://github.com/EmircanDemirci" target="_blank">Venoox</a></p>
+    </footer>
+
+    <script src="privacy.js"></script>
+</body>
+</html>
