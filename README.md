@@ -6,6 +6,7 @@
   <h3>SABİS İçin Gelişmiş Not Hesaplayıcı</h3>
   <p>
     Ders ortalaması, Çan eğrisi simülasyonu ve Transkript GNO hesaplama aracı.
+    <b>Bu eklenti Sakarya Üniversitesi'nin resmi uygulaması değildir. Öğrenciler tarafından geliştirilmiş açık kaynaklı bir araçtır.</b>
   </p>
 </div>
 
