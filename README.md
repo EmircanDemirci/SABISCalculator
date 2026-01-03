@@ -1,7 +1,7 @@
 # 🎓 SABISCalculator
 
 <div align="center">
-  <img src="icon.png" alt="SABISCalculator Logo" width="120" height="120">
+  <img width="600" height="600" alt="icon" src="https://github.com/user-attachments/assets/dca2e3d6-550f-4430-8139-dd4d25d28858" />
   <br>
   <h3>Sakarya Üniversitesi & SUBÜ Öğrencileri İçin Gelişmiş Not Hesaplayıcı</h3>
   <p>
