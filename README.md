@@ -3,7 +3,7 @@
 <div align="center">
   <img width="200" height="200" alt="icon" src="https://github.com/user-attachments/assets/dca2e3d6-550f-4430-8139-dd4d25d28858" />
   <br>
-  <h3>Sakarya Üniversitesi & SUBÜ Öğrencileri İçin Gelişmiş Not Hesaplayıcı</h3>
+  <h3>Sakarya Üniversitesi</h3>
   <p>
     Ders ortalaması, Çan eğrisi simülasyonu ve Transkript GNO hesaplama aracı.
   </p>
