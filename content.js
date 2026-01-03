@@ -1,4 +1,4 @@
-// content.js - Versiyon 15.0 (Clean - Müziksiz, Hatasız, Tam Özellikli)
+// content.js - Versiyon 15.1 (Oran > 100 ise 2'ye Bölme Kuralı)
 
 // --- SABİTLER ---
 const LETTER_COEFFICIENTS = {
@@ -364,8 +364,14 @@ function calculateDisplayAverageGrade(gradeTable) {
   
   if (totalWeight > 0) {
       if (totalWeight > 100) {
-          average = weightedSum / totalWeight; 
+          // İSTEK: Oran 100'ü geçiyorsa (örn 150), 2'ye bölerek hesapla.
+          // weightedSum zaten Not*Oran şeklindedir (Örn: 80 puan * 50 oran = 4000).
+          // Normalde 100'e böleriz (4000/100 = 40 puan).
+          // Eğer 2'ye bölmek istiyorsak, 200'e bölmeliyiz. (4000/200 = 20 puan).
+          // Böylece (Puan1/2) + (Puan2/2) mantığı çalışır.
+          average = weightedSum / 200; 
       } else {
+          // Normal durum (Toplam oran <= 100)
           average = weightedSum / 100;
       }
   }
@@ -539,7 +545,6 @@ function calculateTotalGPA() {
 
   const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   
-  // BURADA triggerCelebration() ÇAĞRISINI SİLDİK, ARTIK BOZULMAYACAK
   showGPABox(gpa, totalCredits);
 }
 
