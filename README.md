@@ -7,14 +7,6 @@
   <p>
     Ders ortalaması, Çan eğrisi simülasyonu ve Transkript GNO hesaplama aracı.
   </p>
-  
-  <p>
-    <em>
-      Bu proje, orijinal fikir sahibi <strong><a href="https://github.com/osmntahir">osmntahir</a></strong> olan 
-      <strong><a href="https://github.com/osmntahir/SabisAverageCalculator">SabisAverageCalculator</a></strong> 
-      projesi temel alınarak geliştirilmiştir.
-    </em>
-  </p>
 </div>
 
 ---
@@ -111,3 +103,12 @@ Sorularınız, önerileriniz veya katkıda bulunmak için:
 * **Geliştirici:** Venoox (Emircan Demirci)
 * **GitHub:** [github.com/EmircanDemirci](https://github.com/EmircanDemirci)
 * **E-posta:** emircandemirci12@gmail.com
+
+
+  <p>
+    <em>
+      Bu proje, orijinal fikir sahibi <strong><a href="https://github.com/osmntahir">osmntahir</a></strong> olan 
+      <strong><a href="https://github.com/osmntahir/SabisAverageCalculator">SabisAverageCalculator</a></strong> 
+      projesi temel alınarak geliştirilmiştir.
+    </em>
+  </p>
