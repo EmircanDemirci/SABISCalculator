@@ -16,8 +16,8 @@
 1. [Proje Hakkında](#-proje-hakkında)
 2. [Özellikler](#-özellikler)
 3. [Kurulum](#-kurulum)
-4. [Nasıl Kullanılır?](#-nasıl-kullanılır) 👈 *(Tıkla ve Git)*
-5. [Gizlilik Politikası](#-gizlilik-politikası) 👈 *(Tıkla ve Git)*
+4. [Nasıl Kullanılır?](#-nasıl-kullanılır) 
+5. [Gizlilik Politikası](#-gizlilik-politikası) 
 6. [İletişim](#-iletişim)
 
 ---
