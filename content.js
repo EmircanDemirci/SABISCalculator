@@ -1,4 +1,4 @@
-// content.js - Versiyon 15.1 (Oran > 100 ise 2'ye Bölme Kuralı)
+// content.js - Versiyon 17.0 (Bütünleme/Final Öncelik Düzeltmesi & Dinamik Oran)
 
 // --- SABİTLER ---
 const LETTER_COEFFICIENTS = {
@@ -19,43 +19,23 @@ let MAX_SEMESTER_FOUND = 0;
 // --- AGRESİF KARANLIK MOD CSS ---
 const DARK_MODE_CSS = `
   /* 1. Temel Yapı ve Arka Planlar */
-  html.sabis-dark-mode, 
-  body.sabis-dark-mode,
-  .sabis-dark-mode #kt_header,
-  .sabis-dark-mode #kt_header_mobile,
-  .sabis-dark-mode #kt_footer {
-      background-color: #121212 !important;
-      background: #121212 !important;
-  }
+  html.sabis-dark-mode, body.sabis-dark-mode, .sabis-dark-mode #kt_header,
+  .sabis-dark-mode #kt_header_mobile, .sabis-dark-mode #kt_footer { background-color: #121212 !important; background: #121212 !important; }
 
   /* 2. Kartlar ve Kutular */
-  .sabis-dark-mode .card,
-  .sabis-dark-mode .card-body,
-  .sabis-dark-mode .portlet,
-  .sabis-dark-mode .modal-content,
-  .sabis-dark-mode .dropdown-menu,
-  .sabis-dark-mode .offcanvas {
-      background-color: #1e1e1e !important;
-      border-color: #333 !important;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+  .sabis-dark-mode .card, .sabis-dark-mode .card-body, .sabis-dark-mode .portlet,
+  .sabis-dark-mode .modal-content, .sabis-dark-mode .dropdown-menu, .sabis-dark-mode .offcanvas {
+      background-color: #1e1e1e !important; border-color: #333 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
   }
-
-  .sabis-dark-mode .card-header,
-  .sabis-dark-mode .modal-header,
-  .sabis-dark-mode .modal-footer {
-      background-color: #252525 !important;
-      border-bottom: 1px solid #333 !important;
-      border-top: 1px solid #333 !important;
+  .sabis-dark-mode .card-header, .sabis-dark-mode .modal-header, .sabis-dark-mode .modal-footer {
+      background-color: #252525 !important; border-bottom: 1px solid #333 !important; border-top: 1px solid #333 !important;
   }
 
   /* 3. Yazılar */
-  .sabis-dark-mode, 
-  .sabis-dark-mode h1, .sabis-dark-mode h2, .sabis-dark-mode h3, 
+  .sabis-dark-mode, .sabis-dark-mode h1, .sabis-dark-mode h2, .sabis-dark-mode h3, 
   .sabis-dark-mode h4, .sabis-dark-mode h5, .sabis-dark-mode h6,
   .sabis-dark-mode span, .sabis-dark-mode div, .sabis-dark-mode p, 
-  .sabis-dark-mode label, .sabis-dark-mode a:not(.btn) {
-      color: #e0e0e0 !important;
-  }
+  .sabis-dark-mode label, .sabis-dark-mode a:not(.btn) { color: #e0e0e0 !important; }
   .sabis-dark-mode a:hover { color: #667eea !important; }
 
   /* 4. Tablolar */
@@ -71,80 +51,42 @@ const DARK_MODE_CSS = `
   }
 
   /* 6. GNO Kutusu */
-  .sabis-dark-mode #sabis-gpa-box {
-      background-color: #1e1e1e !important; border-left-color: #bb86fc !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
-  }
+  .sabis-dark-mode #sabis-gpa-box { background-color: #1e1e1e !important; border-left-color: #bb86fc !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important; }
   .sabis-dark-mode #sabis-gpa-box div { color: #ccc !important; }
   
   /* 7. İkonlar */
   .sabis-dark-mode i, .sabis-dark-mode .svg-icon svg g [fill] { color: #a0a0a0 !important; fill: #a0a0a0 !important; }
 
   /* 8. Symbol Renkleri */
-  .sabis-dark-mode .symbol.symbol-light-primary .symbol-label,
-  .sabis-dark-mode .symbol.symbol-60 .symbol-label {
-      background-color: #0d2b5e !important;
-      color: #ffffff !important; 
+  .sabis-dark-mode .symbol.symbol-light-primary .symbol-label, .sabis-dark-mode .symbol.symbol-60 .symbol-label {
+      background-color: #0d2b5e !important; color: #ffffff !important; 
   }
 
   /* 9. Sol Menü (Aside) */
-  .sabis-dark-mode .aside,
-  .sabis-dark-mode .aside-left,
-  .sabis-dark-mode .aside-menu,
-  .sabis-dark-mode .brand {
-      background-color: #1a1a1a !important;
-      border-right: 1px solid #333 !important;
+  .sabis-dark-mode .aside, .sabis-dark-mode .aside-left, .sabis-dark-mode .aside-menu, .sabis-dark-mode .brand {
+      background-color: #1a1a1a !important; border-right: 1px solid #333 !important;
   }
-  .sabis-dark-mode .aside .menu-text,
-  .sabis-dark-mode .aside .menu-icon i,
-  .sabis-dark-mode .aside .menu-link { color: #a0a0a0 !important; }
+  .sabis-dark-mode .aside .menu-text, .sabis-dark-mode .aside .menu-icon i, .sabis-dark-mode .aside .menu-link { color: #a0a0a0 !important; }
   
-  /* Menü HOVER */
-  .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link,
-  .sabis-dark-mode .aside .menu-item .menu-link:hover {
-      background-color: #151515 !important; 
-      color: #ffffff !important;
+  .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link, .sabis-dark-mode .aside .menu-item .menu-link:hover {
+      background-color: #151515 !important; color: #ffffff !important;
   }
-  .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link .menu-text,
-  .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link .menu-icon i,
-  .sabis-dark-mode .aside .menu-item .menu-link:hover .menu-text,
-  .sabis-dark-mode .aside .menu-item .menu-link:hover .menu-icon i {
-      color: #ffffff !important;
-  }
+  .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link .menu-text, .sabis-dark-mode .aside .menu-item.menu-item-hover > .menu-link .menu-icon i,
+  .sabis-dark-mode .aside .menu-item .menu-link:hover .menu-text, .sabis-dark-mode .aside .menu-item .menu-link:hover .menu-icon i { color: #ffffff !important; }
 
-  /* Menü ACTIVE */
-  .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link {
-      background-color: #152036 !important; 
-      border-left: 3px solid #3699ff !important;
-  }
-  .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link .menu-text,
-  .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link .menu-icon i {
-      color: #3699ff !important;
-  }
+  .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link { background-color: #152036 !important; border-left: 3px solid #3699ff !important; }
+  .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link .menu-text, .sabis-dark-mode .aside .menu-item.menu-item-active > .menu-link .menu-icon i { color: #3699ff !important; }
 
-  /* 10. Timeline ve Flex Düzeltmeleri */
-  .sabis-dark-mode .timeline-content {
-      background-color: #152036 !important; color: #e0e0e0 !important; border: 1px solid #2b3a55 !important;
-  }
-  .sabis-dark-mode .d-flex.align-items-center.justify-content-between.mb-2 {
-      background-color: transparent !important; background: none !important;
-  }
+  /* 10. Timeline ve Flex */
+  .sabis-dark-mode .timeline-content { background-color: #152036 !important; color: #e0e0e0 !important; border: 1px solid #2b3a55 !important; }
+  .sabis-dark-mode .d-flex.align-items-center.justify-content-between.mb-2 { background-color: transparent !important; background: none !important; }
 
-  /* 11. Navi Items */
-  .sabis-dark-mode .navi .navi-item .navi-link:hover {
-      background-color: #151515 !important; color: #fff !important;
-  }
-  .sabis-dark-mode .navi .navi-item.navi-item-active .navi-link,
-  .sabis-dark-mode .navi .navi-item .navi-link.active {
+  /* 11. Navi & Calendar */
+  .sabis-dark-mode .navi .navi-item .navi-link:hover { background-color: #151515 !important; color: #fff !important; }
+  .sabis-dark-mode .navi .navi-item.navi-item-active .navi-link, .sabis-dark-mode .navi .navi-item .navi-link.active {
       background-color: #152036 !important; color: #3699ff !important; border-radius: 4px;
   }
-  .sabis-dark-mode .navi .navi-item .navi-link .navi-text { color: inherit !important; }
-
-  /* 12. Calendar Events */
-  .sabis-dark-mode .fc-content {
-      background-color: #152036 !important;
-      color: #ffffff !important;
-      border: 1px solid #2b3a55 !important;
-  }
+  .sabis-dark-mode .fc-content { background-color: #152036 !important; color: #ffffff !important; border: 1px solid #2b3a55 !important; }
 `;
 
 // --- YARDIMCI FONKSİYONLAR ---
@@ -202,12 +144,10 @@ function getLetterGradeFromScore(score, ddLimit = 50, finalScore = null) {
     CC: 65 - shift, DC: 58 - shift, DD: 50 - shift, FD: 40 - shift
   };
 
-  // KURAL 1: Final notu girilmişse ve 40'ın altındaysa direkt FF
   if (finalScore !== null && finalScore < 40) {
       return { letter: 'FF', color: LETTER_COLORS.FF, reason: 'Final Barajı' };
   }
 
-  // Standart Hesaplama
   if (roundedScore >= limits.AA) return { letter: 'AA', color: LETTER_COLORS.AA };
   if (roundedScore >= limits.BA) return { letter: 'BA', color: LETTER_COLORS.BA };
   if (roundedScore >= limits.BB) return { letter: 'BB', color: LETTER_COLORS.BB };
@@ -216,13 +156,10 @@ function getLetterGradeFromScore(score, ddLimit = 50, finalScore = null) {
   if (roundedScore >= limits.DC) return { letter: 'DC', color: LETTER_COLORS.DC };
   if (roundedScore >= limits.DD) return { letter: 'DD', color: LETTER_COLORS.DD };
   
-  // KURAL 2: Final 40'ı geçtiyse ama ortalama yetmiyorsa (FD)
   if (roundedScore >= limits.FD) {
       return { letter: 'FD', color: LETTER_COLORS.FD };
   } else {
-      if (finalScore !== null && finalScore >= 40) {
-          return { letter: 'FD', color: LETTER_COLORS.FD };
-      }
+      if (finalScore !== null && finalScore >= 40) return { letter: 'FD', color: LETTER_COLORS.FD };
       return { letter: 'FF', color: LETTER_COLORS.FF };
   }
 }
@@ -316,17 +253,30 @@ function initializeGradeCalculator() {
           }
       }
     };
+    
     updateAverageGrade();
   });
 }
 
 function calculateDisplayAverageGrade(gradeTable) {
   const gradeRows = gradeTable.querySelectorAll('tbody tr');
-  let hasButunleme = false;
   
+  // ÖNCE BÜTÜNLEME KONTROLÜ
+  // Eğer Bütünleme satırında geçerli bir sayı varsa (GR, DZ veya boş değilse), Final yerine o kullanılır.
+  let validButunlemeExists = false;
+
   gradeRows.forEach((row) => {
     const type = row.querySelector('td:nth-child(2)');
-    if (type && type.textContent.trim().toLowerCase().includes('bütünleme')) hasButunleme = true;
+    if (type && type.textContent.trim().toLowerCase().includes('bütünleme')) {
+        const gradeCell = row.querySelector('.text-right');
+        if (gradeCell) {
+             const gradeInput = gradeCell.querySelector('.grade-input');
+             let gradeText = gradeInput ? gradeInput.value.trim() : gradeCell.textContent.trim();
+             if (gradeText && !isNaN(parseFloat(gradeText.replace(',', '.')))) {
+                 validButunlemeExists = true;
+             }
+        }
+    }
   });
 
   let weightedSum = 0; 
@@ -339,7 +289,11 @@ function calculateDisplayAverageGrade(gradeTable) {
     
     const type = typeCell.textContent.trim().toLowerCase();
     
-    if (hasButunleme && type.includes('final') && !type.includes('bütünleme')) return;
+    // Eğer geçerli bir Bütünleme notu varsa (input veya açıklanmış), Final satırını atla.
+    if (validButunlemeExists && type.includes('final') && !type.includes('bütünleme')) return;
+
+    // Eğer geçerli bir Bütünleme notu YOKSA, ama bu satır Bütünleme ise, bunu hesaba katma (çünkü GR veya boştur).
+    if (!validButunlemeExists && type.includes('bütünleme')) return;
 
     const ratioText = row.querySelector('td:first-child').textContent.trim();
     const ratioValue = parseFloat(ratioText.replace(',', '.'));
@@ -348,6 +302,9 @@ function calculateDisplayAverageGrade(gradeTable) {
     
     const gradeInput = gradeCell.querySelector('.grade-input');
     let gradeText = gradeInput ? gradeInput.value.trim() : gradeCell.textContent.trim();
+    
+    if (gradeText === "") gradeText = "0"; 
+
     const grade = parseFloat(gradeText.replace(',', '.'));
 
     if (!isNaN(grade) && !isNaN(ratioValue)) {
@@ -363,23 +320,13 @@ function calculateDisplayAverageGrade(gradeTable) {
   let average = 0;
   
   if (totalWeight > 0) {
-      if (totalWeight > 100) {
-          // İSTEK: Oran 100'ü geçiyorsa (örn 150), 2'ye bölerek hesapla.
-          // weightedSum zaten Not*Oran şeklindedir (Örn: 80 puan * 50 oran = 4000).
-          // Normalde 100'e böleriz (4000/100 = 40 puan).
-          // Eğer 2'ye bölmek istiyorsak, 200'e bölmeliyiz. (4000/200 = 20 puan).
-          // Böylece (Puan1/2) + (Puan2/2) mantığı çalışır.
-          average = weightedSum / 200; 
-      } else {
-          // Normal durum (Toplam oran <= 100)
-          average = weightedSum / 100;
-      }
+      average = weightedSum / totalWeight;
   }
 
   return { average: average, finalScore: finalScore };
 }
 
-// --- BÖLÜM 2: TRANSKRİPT GNO HESAPLAMA (GÜÇLENDİRİLMİŞ) ---
+// --- BÖLÜM 2: TRANSKRİPT GNO HESAPLAMA ---
 
 function initializeTranscriptCalculator() {
   const cards = document.querySelectorAll('.card');
@@ -544,7 +491,6 @@ function calculateTotalGPA() {
   });
 
   const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
-  
   showGPABox(gpa, totalCredits);
 }
 
@@ -644,7 +590,7 @@ function showGPABox(gpa, totalCredits) {
 
 function runExtension() {
   checkSettings(function(isEnabled, isDarkMode) {
-    applyTheme(isDarkMode); // Tema Uygula
+    applyTheme(isDarkMode);
     if (!isEnabled) {
       removeAddedElements();
       return;
