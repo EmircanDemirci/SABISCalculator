@@ -1,10 +1,16 @@
-// content.js - Versiyon 17.0 (Bütünleme/Final Öncelik Düzeltmesi & Dinamik Oran)
+// content.js - Versiyon 18.0 (Resmi Not Entegrasyonu & Tersine Çan Mühendisliği)
 
 // --- SABİTLER ---
 const LETTER_COEFFICIENTS = {
   'AA': 4.00, 'BA': 3.50, 'BB': 3.00, 'CB': 2.50,
   'CC': 2.00, 'DC': 1.50, 'DD': 1.00, 'FD': 0.50, 'FF': 0.00,
   'G': null, 'M': null, 'DZ': 0.00, 'GR': 0.00, 'YT': null, 'YZ': null, 'MU': null
+};
+
+// Çan hesabı için harflerin standart (DD=50 iken) taban puanları
+const LETTER_BASE_SCORES = {
+  'AA': 90, 'BA': 85, 'BB': 80, 'CB': 75,
+  'CC': 65, 'DC': 58, 'DD': 50, 'FD': 40
 };
 
 const LETTER_COLORS = {
@@ -206,7 +212,50 @@ function initializeGradeCalculator() {
       const displayAverageGrade = result.average;
       const finalScore = result.finalScore;
 
-      const letterData = getLetterGradeFromScore(displayAverageGrade, currentDDLimit, finalScore);
+      // --- RESMİ NOT KONTROLÜ VE OTOMATİK ÇAN HESABI ---
+      let officialLetter = null;
+      gradeRows.forEach((row) => {
+          const typeCell = row.querySelector('td:nth-child(2)');
+          if (typeCell) {
+              const typeText = typeCell.textContent.trim().toLowerCase();
+              if (typeText.includes('başarı notu') || typeText.includes('harf notu')) {
+                  const gradeCell = row.querySelector('.text-right');
+                  if (gradeCell) {
+                      const text = gradeCell.textContent.trim().toUpperCase();
+                      if (LETTER_COEFFICIENTS.hasOwnProperty(text)) {
+                          officialLetter = text;
+                      }
+                  }
+              }
+          }
+      });
+
+      // Eğer resmi not varsa, Çan (DD) sınırını tersten hesapla
+      if (officialLetter && LETTER_BASE_SCORES[officialLetter] && displayAverageGrade > 0) {
+          // Formül: Sınır = Taban - (50 - DD) => Ortalama >= Taban - 50 + DD
+          // DD = Ortalama - Taban + 50
+          let calculatedDD = Math.round(displayAverageGrade - LETTER_BASE_SCORES[officialLetter] + 50);
+          
+          // Mantıksız değerleri engelle (Örn: DD negatif olamaz, 100'ü geçemez)
+          if (calculatedDD < 20) calculatedDD = 20; 
+          if (calculatedDD > 80) calculatedDD = 80;
+
+          // Eğer final barajına takılmamışsa DD'yi güncelle
+          if (finalScore === null || finalScore >= 40) {
+              currentDDLimit = calculatedDD;
+              if (ddInput && document.activeElement !== ddInput) {
+                  ddInput.value = calculatedDD;
+              }
+          }
+      }
+
+      let letterData = getLetterGradeFromScore(displayAverageGrade, currentDDLimit, finalScore);
+      
+      // Eğer resmi not bulunduysa rozeti zorla ona eşitle (Renkleriyle beraber)
+      if (officialLetter) {
+          letterData.letter = officialLetter;
+          letterData.color = LETTER_COLORS[officialLetter] || '#333';
+      }
 
       let averageGradeRow = gradeTable.querySelector('.average-grade-row');
 
@@ -261,8 +310,7 @@ function initializeGradeCalculator() {
 function calculateDisplayAverageGrade(gradeTable) {
   const gradeRows = gradeTable.querySelectorAll('tbody tr');
   
-  // ÖNCE BÜTÜNLEME KONTROLÜ
-  // Eğer Bütünleme satırında geçerli bir sayı varsa (GR, DZ veya boş değilse), Final yerine o kullanılır.
+  // --- BÜTÜNLEME KONTROLÜ ---
   let validButunlemeExists = false;
 
   gradeRows.forEach((row) => {
@@ -279,9 +327,12 @@ function calculateDisplayAverageGrade(gradeTable) {
     }
   });
 
-  let weightedSum = 0; 
-  let totalWeight = 0; 
-  let finalScore = null;
+  // --- NOT AYRIŞTIRMA ---
+  let termWeightedSum = 0; 
+  let termTotalWeight = 0; 
+  
+  let finalGrade = null;
+  let finalWeight = 0;
 
   gradeRows.forEach((row) => {
     const typeCell = row.querySelector('td:nth-child(2)');
@@ -289,14 +340,12 @@ function calculateDisplayAverageGrade(gradeTable) {
     
     const type = typeCell.textContent.trim().toLowerCase();
     
-    // Eğer geçerli bir Bütünleme notu varsa (input veya açıklanmış), Final satırını atla.
     if (validButunlemeExists && type.includes('final') && !type.includes('bütünleme')) return;
-
-    // Eğer geçerli bir Bütünleme notu YOKSA, ama bu satır Bütünleme ise, bunu hesaba katma (çünkü GR veya boştur).
     if (!validButunlemeExists && type.includes('bütünleme')) return;
 
     const ratioText = row.querySelector('td:first-child').textContent.trim();
     const ratioValue = parseFloat(ratioText.replace(',', '.'));
+    
     const gradeCell = row.querySelector('.text-right');
     if (!gradeCell) return;
     
@@ -308,22 +357,38 @@ function calculateDisplayAverageGrade(gradeTable) {
     const grade = parseFloat(gradeText.replace(',', '.'));
 
     if (!isNaN(grade) && !isNaN(ratioValue)) {
-      weightedSum += (grade * ratioValue);
-      totalWeight += ratioValue;
-
       if (type.includes('final') || type.includes('bütünleme')) {
-          finalScore = grade;
+          finalGrade = grade;
+          finalWeight = ratioValue;
+      } else {
+          termWeightedSum += (grade * ratioValue);
+          termTotalWeight += ratioValue;
       }
     }
   });
 
   let average = 0;
   
-  if (totalWeight > 0) {
-      average = weightedSum / totalWeight;
+  // --- HESAPLAMA MANTIĞI ---
+  if (termTotalWeight >= 99 && termTotalWeight <= 101 && finalGrade !== null) {
+      const termAverage = termWeightedSum / termTotalWeight; 
+      average = (termAverage * 0.50) + (finalGrade * 0.50);
+  } 
+  else {
+      let totalW = termTotalWeight;
+      let totalS = termWeightedSum;
+
+      if (finalGrade !== null) {
+          totalS += (finalGrade * finalWeight);
+          totalW += finalWeight;
+      }
+
+      if (totalW > 0) {
+          average = totalS / totalW;
+      }
   }
 
-  return { average: average, finalScore: finalScore };
+  return { average: average, finalScore: finalGrade };
 }
 
 // --- BÖLÜM 2: TRANSKRİPT GNO HESAPLAMA ---
